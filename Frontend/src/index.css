@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.active{
+    color: #1E738E;
+}
+.dashboard:hover{
+    background-color: #1E73BE;
+    color: white;
+    
+}
+.login-btn:hover{
+  background-color: #1E73BE;
+  color: white;
+}
+/* nav bar cart menuu css */
+.topleft{
+  margin-left: 12px;
+    bottom: 12px;
+    background: black;
+    border-radius: 50%;
+    padding: 3px;
+    color: white;
+    width: 26px;
+}
