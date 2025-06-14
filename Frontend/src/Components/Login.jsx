@@ -1,47 +1,56 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLoginUserMutation } from '../Redux/features/Users/usersAuth'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginUsers } from '../Redux/features/Users/authSlice'
 import { useNavigate } from 'react-router-dom'
-import { use } from 'react'
+import axios from 'axios'
 
 export const Login = () => {
 	const [email,setemail] = useState('')
 	const [password,setpassword] = useState('')
 	const [message,setmessage] = useState('')
+	// const [users,setUsers]  = useState()
 	const [loginUser] = useLoginUserMutation()
 	// console.log(loginUser);
 	const user = useSelector((state)=>state.user)
 	// console.log("user ",user);
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
+	
+	
+	const data = {
+		email,
+		password
+	}
 	const handleSubmit =async(e)=>{
 		e.preventDefault()
-		const data = {
-			email,
-			password
-		}
+	
 		
 		try {
-			// user.find((i)=>{
-			// 	if (i.email  == data.email) {
-			// 		navigate('/')
-					
-			// 	}
-			// })
+		await axios({
+				method: 'POST',
+				url: 'http://localhost:3000/api/users/login',
+				data, 
+		
+			}).then(function(response) {
+				console.log(response);
+			}).catch(function (error){
+				console.log(error);});
+				navigate('/')
 			
-			const response = await loginUser(data).unwrap();
-			console.log(response);
-			const {user} = response;
-			dispatch(loginUsers(user))
-			navigate('/')
+			
+			// const response = await loginUser(data).unwrap();
+			// console.log(response);
+			// const {user} = response;
+			// dispatch(loginUsers(user))
+			// navigate('/')
 			
 		} catch (error) {
 			console.log("Failed To Login");
-			setmessage('Failed To Login')
-			
+			setmessage('Failed To Login')	
 		}
 	}
+
   return (
     <div class="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
 	<div class="relative py-3 sm:max-w-xl sm:mx-auto">

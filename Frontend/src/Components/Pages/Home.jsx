@@ -1,30 +1,46 @@
 import { useEffect, useState } from "react";
-import { useGetProductsQuery } from "../../Redux/features/Products/ProductSlice";
+// import { useGetProductsQuery } from "../../Redux/features/Products/ProductSlice";
 import { useGetUsersQuery } from "../../Redux/features/Users/usersAuth";
 import { LandingPage } from "./LandingPage";
+import axios from 'axios'
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../Redux/features/Products/Cart";
 // import { addToCart } from "../../Redux/features/Users/authSlice";
 export function Home() {
+  const [data,setData] = useState()
   // const {data} = useGetUsersQuery()
   // console.log("data ",data);
   // const [Products, setProduct] = useState([]);
-  const { data, error, isLoading } = useGetProductsQuery();
+  // const { data, error, isLoading } = useGetProductsQuery();
   // const cartItems = useSelector((state) => state.cart.products);
-
+ const fetchData = async()=>{
+     await axios.get(`http://localhost:3000/api/products`)
+     .then((data)=>{
+      console.log(data);
+       setData(data)
+     })
+     .catch((error)=>{
+      console.log("error",error);
+     })
+    }
+ 
+  console.log("data ",data);
+  
   const dispatch = useDispatch();
 
   const cart = (event, item) => {
     event.preventDefault();
     dispatch(addToCart(item));
   };
-
+ useEffect(()=>{ 
+    fetchData()
+  },[])
   return (
     <>
       <LandingPage />
       {/* <div className="container flex-row"> */}
       <div className="grid lg:grid-cols-4 gap-4 md:grid-cols-2 sm:grid-cols-2   ml-4 mr-4 ">
-        {error ? (
+        {/* {error ? (
           <>
             <h1>Error in Fetching Products</h1>
           </>
@@ -32,8 +48,8 @@ export function Home() {
           <>
             <h1 style={{ color: "black" }}>Loading...</h1>
           </>
-        ) : data?.getProducts ? (
-          data?.getProducts.map((item) => (
+        ) : data?.getProducts ? ( */}
+         { data?.data?.getProducts.map((item) => (
             <div
               key={item?.id}
               className="w-full mt-10 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
@@ -117,8 +133,8 @@ export function Home() {
                 </div>
               </div>
             </div>
-          ))
-        ) : null}
+          ))}
+        {/* ) : null} */}
         {/* </div> */}
       </div>
     </>
